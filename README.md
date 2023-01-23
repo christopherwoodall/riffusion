@@ -44,13 +44,18 @@ conda create --name riffusion python=3.9
 conda activate riffusion
 ```
 
-Install Python dependencies:
+Install from PIP
+```bash
+python -m pip install riffusion
 ```
-python -m pip install -r requirements.txt
+
+Install Locally:
+```bash
+python -m pip install -e ".[developer]"
 ```
 
 In order to use audio formats other than WAV, [ffmpeg](https://ffmpeg.org/download.html) is required.
-```
+```bash
 sudo apt-get install ffmpeg          # linux
 brew install ffmpeg                  # mac
 conda install -c conda-forge ffmpeg  # conda
@@ -104,18 +109,18 @@ torch.backends.mps.is_available()
 Riffusion comes with a command line interface for performing common tasks.
 
 See available commands:
-```
-python -m riffusion.cli -h
+```bash
+riffusion-cli -h
 ```
 
 Get help for a specific command:
-```
-python -m riffusion.cli image-to-audio -h
+```bash
+riffusion-cli image-to-audio -h
 ```
 
 Execute:
-```
-python -m riffusion.cli image-to-audio --image spectrogram_image.png --audio clip.wav
+```bash
+riffusion-cli image-to-audio --image spectrogram_image.png --audio clip.wav
 ```
 
 ## Riffusion Playground
@@ -123,7 +128,7 @@ python -m riffusion.cli image-to-audio --image spectrogram_image.png --audio cli
 Riffusion contains a [streamlit](https://streamlit.io/) app for interactive use and exploration.
 
 Run with:
-```
+```bash
 python -m streamlit run riffusion/streamlit/playground.py --browser.serverAddress 127.0.0.1 --browser.serverPort 8501
 ```
 
@@ -137,8 +142,8 @@ Riffusion can be run as a flask server that provides inference via API. This ser
 
 Run with:
 
-```
-python -m riffusion.server --host 127.0.0.1 --port 3013
+```bash
+riffusion-server --host 127.0.0.1 --port 3013
 ```
 
 You can specify `--checkpoint` with your own directory or huggingface ID in diffusers format.
@@ -148,7 +153,7 @@ Use the `--device` argument to specify the torch device to use.
 The model endpoint is now available at `http://127.0.0.1:3013/run_inference` via POST request.
 
 Example input (see [InferenceInput](https://github.com/hmartiro/riffusion-inference/blob/main/riffusion/datatypes.py#L28) for the API):
-```
+```json
 {
   "alpha": 0.75,
   "num_inference_steps": 50,
@@ -171,7 +176,7 @@ Example input (see [InferenceInput](https://github.com/hmartiro/riffusion-infere
 ```
 
 Example output (see [InferenceOutput](https://github.com/hmartiro/riffusion-inference/blob/main/riffusion/datatypes.py#L54) for the API):
-```
+```json
 {
   "image": "< base64 encoded JPEG image >",
   "audio": "< base64 encoded MP3 clip >"
@@ -182,22 +187,22 @@ Example output (see [InferenceOutput](https://github.com/hmartiro/riffusion-infe
 Tests live in the `test/` directory and are implemented with `unittest`.
 
 To run all tests:
-```
+```bash
 python -m unittest test/*_test.py
 ```
 
 To run a single test:
-```
+```bash
 python -m unittest test.audio_to_image_test
 ```
 
 To preserve temporary outputs for debugging, set `RIFFUSION_TEST_DEBUG`:
-```
+```bash
 RIFFUSION_TEST_DEBUG=1 python -m unittest test.audio_to_image_test
 ```
 
 To run a single test case within a test:
-```
+```bash
 python -m unittest test.audio_to_image_test -k AudioToImageTest.test_stereo
 ```
 
